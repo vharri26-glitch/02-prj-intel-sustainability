@@ -90,6 +90,28 @@ header p {
 	flex-shrink: 0;
 }
 
+/* Milestone card image and text overlay */
+.milestone-card {
+	position: relative;
+	overflow: hidden;
+	padding: 0;
+}
+
+.card-image {
+	display: block;
+	width: 100%;
+	height: 220px;
+	object-fit: cover;
+}
+
+.card-overlay {
+	padding: 20px;
+}
+
+.card-details p {
+	line-height: 1.5;
+}
+
 /* Year */
 .timeline h2 {
 	color: #0068b5;
