@@ -70,58 +70,440 @@ header p {
 	line-height: 1.6;
 }
 
-/* Timeline area */
+/* =========================
+	 TIMELINE
+========================= */
+
 .timeline {
 	display: flex;
-	gap: 24px;
+	gap: 35px;
 	overflow-x: auto;
-	padding: 50px 40px;
-	background-color: #f4f7f9;
+	padding: 60px 40px 80px;
+	background-color: #001e3c;
+
+	scroll-snap-type: x mandatory;
 }
 
-/* Individual milestone cards */
-.timeline > div {
-	background: white;
-	min-width: 280px;
-	max-width: 280px;
-	padding: 25px;
-	border-radius: 8px;
-	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-	flex-shrink: 0;
+/* =========================
+	 COMPUTER CIRCUIT SCROLLBAR
+========================= */
+
+.timeline::-webkit-scrollbar {
+	height: 18px;
 }
 
-/* Milestone card image and text overlay */
-.milestone-card {
+.timeline::-webkit-scrollbar-track {
+	background:
+		radial-gradient(
+			circle,
+			#00c7fd 2px,
+			transparent 3px
+		) 0 50% / 45px 18px repeat-x,
+
+		linear-gradient(
+			to bottom,
+			transparent 7px,
+			rgba(0, 199, 253, 0.55) 7px,
+			rgba(0, 199, 253, 0.55) 10px,
+			transparent 10px
+		),
+
+		#00162d;
+
+	border-radius: 20px;
+
+	box-shadow:
+		inset 0 0 10px rgba(0, 199, 253, 0.25);
+}
+
+.timeline::-webkit-scrollbar-thumb {
+	background:
+		linear-gradient(
+			135deg,
+			#00c7fd,
+			#0068b5 55%,
+			#4b46ff
+		);
+
+	border: 3px solid #001e3c;
+
+	border-radius: 4px;
+
+	box-shadow:
+		0 0 8px rgba(0, 199, 253, 0.8),
+		0 0 18px rgba(0, 199, 253, 0.5);
+}
+
+/* stronger glow while grabbing/hovering */
+.timeline::-webkit-scrollbar-thumb:hover {
+	background:
+		linear-gradient(
+			135deg,
+			#59e1ff,
+			#008cff 55%,
+			#706cff
+		);
+
+	box-shadow:
+		0 0 12px rgba(0, 199, 253, 1),
+		0 0 26px rgba(0, 199, 253, 0.75);
+}
+
+/* =========================
+	 TIMELINE CARD
+========================= */
+
+.timeline .milestone-card {
 	position: relative;
-	overflow: hidden;
-	padding: 0;
+
+	min-width: 420px;
+	width: 420px;
+	height: 500px;
+
+	flex-shrink: 0;
+	overflow: visible;
+
+	background: transparent;
+
+	scroll-snap-align: center;
+
+	/* actual visible light around image */
+	box-shadow:
+		0 0 25px rgba(0, 199, 253, 0.45),
+		0 0 55px rgba(0, 199, 253, 0.25),
+		0 0 80px rgba(70, 80, 255, 0.18);
+
+	transition:
+		box-shadow 0.5s ease,
+		transform 0.5s ease;
 }
 
-.card-image {
-	display: block;
+/* stronger light when hovering */
+.timeline .milestone-card:hover {
+	box-shadow:
+		0 0 30px rgba(0, 199, 253, 0.85),
+		0 0 65px rgba(0, 199, 253, 0.55),
+		0 0 100px rgba(70, 80, 255, 0.40);
+
+	transform: translateY(-4px);
+}
+
+/* =========================
+	 PHOTO
+========================= */
+
+.milestone-card .card-image {
+	position: absolute;
+	inset: 0;
+
+	z-index: 1;
+
 	width: 100%;
-	height: 220px;
+	height: 100%;
+
 	object-fit: cover;
+
+	transition:
+		filter 0.5s ease,
+		transform 0.5s ease;
+
+	-webkit-mask-image: linear-gradient(
+		to bottom,
+		transparent 0%,
+		black 10%,
+		black 90%,
+		transparent 100%
+	);
+
+	mask-image: linear-gradient(
+		to bottom,
+		transparent 0%,
+		black 10%,
+		black 90%,
+		transparent 100%
+	);
 }
 
-.card-overlay {
-	padding: 20px;
+/* soften photo when reading */
+.milestone-card:hover .card-image {
+	filter: blur(3px) brightness(0.48);
+	transform: scale(1.02);
 }
 
-.card-details p {
-	line-height: 1.5;
+/* Keep the Intel logo visible in the 1968 image */
+.timeline .milestone-card:first-child .card-image {
+	object-position: 85% center;
 }
 
-/* Year */
-.timeline h2 {
-	color: #0068b5;
-	font-size: 26px;
-	margin: 0 0 10px;
+/* =========================
+	 TEXT OVER IMAGE
+========================= */
+
+.milestone-card .card-overlay {
+	position: absolute;
+	inset: 0;
+
+	z-index: 2;
+
+	display: flex;
+	flex-direction: column;
+
+	justify-content: center;
+	align-items: center;
+
+	padding: 35px;
+
+	box-sizing: border-box;
+
+	text-align: center;
+
+	color: white;
+
+	/* very light overlay in normal state */
+	background: linear-gradient(
+		to bottom,
+		rgba(0, 20, 45, 0.05),
+		rgba(0, 20, 45, 0.18),
+		rgba(0, 20, 45, 0.08)
+	);
+
+	transition: background 0.5s ease;
 }
 
-/* Milestone title */
-.timeline h3 {
-	color: #001e3c;
-	font-size: 20px;
-	margin: 0 0 15px;
+/* =========================
+	 YEAR
+========================= */
+
+.milestone-card .card-overlay h2 {
+	margin: 0;
+
+	font-size: 52px;
+	font-weight: 700;
+	color: white;
+	letter-spacing: 1px;
+
+	text-shadow:
+		0 2px 8px rgba(0, 0, 0, 0.9),
+		0 0 12px rgba(0, 0, 0, 0.5);
+
+	transition: transform 0.5s ease;
+}
+
+/* =========================
+	 HIDDEN DETAILS
+========================= */
+
+.milestone-card .card-details {
+	opacity: 0;
+
+	max-height: 0;
+
+	overflow: hidden;
+
+	transform: translateY(25px);
+
+	transition:
+		opacity 0.5s ease,
+		transform 0.5s ease,
+		max-height 0.5s ease;
+}
+
+.milestone-card .card-details h3 {
+	margin: 15px 0 12px;
+
+	font-size: 27px;
+	font-weight: 600;
+	line-height: 1.25;
+
+	color: white;
+
+	text-shadow:
+		0 2px 8px rgba(0, 0, 0, 0.9);
+}
+
+.milestone-card .card-details p {
+	margin: 0;
+
+	font-size: 19px;
+
+	font-weight: 400;
+	line-height: 1.6;
+
+	color: white;
+
+	max-width: 320px;
+
+	text-shadow:
+		0 2px 5px rgba(0, 0, 0, 1),
+		0 0 12px rgba(0, 0, 0, 0.8);
+}
+
+/* =========================
+	 HOVER EFFECT
+========================= */
+
+.milestone-card:hover .card-overlay {
+	background: linear-gradient(
+		to bottom,
+		rgba(0, 20, 45, 0.15),
+		rgba(0, 20, 45, 0.62),
+		rgba(0, 20, 45, 0.30)
+	);
+}
+
+/* year moves upward */
+.milestone-card:hover .card-overlay h2 {
+	transform: translateY(-55px);
+}
+
+/* details fade in */
+.milestone-card:hover .card-details {
+	opacity: 1;
+
+	max-height: 260px;
+
+	transform: translateY(-30px);
+}
+
+/* =========================
+	 MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+	.timeline {
+		flex-direction: column;
+
+		overflow-x: hidden;
+
+		padding: 40px 20px;
+
+		gap: 35px;
+	}
+
+	.timeline .milestone-card {
+		width: 100%;
+
+		min-width: 0;
+
+		height: 420px;
+	}
+
+	/* mobile doesn't have real hover,
+		 so show the information automatically */
+	.milestone-card .card-overlay {
+		background: linear-gradient(
+			to bottom,
+			rgba(0, 20, 45, 0.15),
+			rgba(0, 20, 45, 0.58),
+			rgba(0, 20, 45, 0.30)
+		);
+	}
+
+	.milestone-card .card-overlay h2 {
+		transform: translateY(-45px);
+	}
+
+	.milestone-card .card-details {
+		opacity: 1;
+
+		max-height: 260px;
+
+		transform: translateY(-25px);
+	}
+}
+
+/* =========================
+	 MOBILE TIMELINE
+========================= */
+
+@media (max-width: 700px) {
+
+	.timeline {
+		flex-direction: column;
+		overflow-x: hidden;
+
+		gap: 45px;
+
+		padding: 40px 20px 60px;
+	}
+
+	.timeline .milestone-card {
+		width: 100%;
+		min-width: 0;
+		height: 500px;
+	}
+
+	/* soften photo automatically on mobile */
+	.milestone-card .card-image {
+		filter: blur(2px) brightness(0.5);
+		transform: scale(1.02);
+	}
+
+	/* show darker overlay */
+	.milestone-card .card-overlay {
+		background: linear-gradient(
+			to bottom,
+			rgba(0, 20, 45, 0.15),
+			rgba(0, 20, 45, 0.62),
+			rgba(0, 20, 45, 0.30)
+		);
+	}
+
+	/* year already moved upward */
+	.milestone-card .card-overlay h2 {
+		font-size: 44px;
+		transform: translateY(-45px);
+	}
+
+	/* show text automatically */
+	.milestone-card .card-details {
+		opacity: 1;
+		max-height: 300px;
+		transform: translateY(-25px);
+	}
+
+	.milestone-card .card-details h3 {
+		font-size: 25px;
+	}
+
+	.milestone-card .card-details p {
+		font-size: 18px;
+		line-height: 1.6;
+		max-width: 320px;
+	}
+}
+
+/* Bottom timeline instruction */
+
+.timeline-instruction {
+	margin: 0;
+	padding: 18px 20px 32px;
+
+	background-color: #001e3c;
+	color: #9fe7ff;
+
+	text-align: center;
+
+	font-size: 16px;
+	font-weight: 500;
+	letter-spacing: 0.4px;
+}
+
+/* Make sure the bottom of the whole page matches */
+html,
+body {
+	background-color: #001e3c;
+}
+
+@media (max-width: 700px) {
+
+	.timeline-instruction {
+		font-size: 0;
+	}
+
+	.timeline-instruction::after {
+		content: "Scroll down to explore Intel's timeline";
+		font-size: 16px;
+	}
 }
